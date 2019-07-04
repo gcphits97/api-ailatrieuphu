@@ -1,0 +1,196 @@
+<div class="container">
+    <div class="table-wrapper">
+        <div class="table-title">
+            <div class="row">
+                <div class="col-sm-12 col-md-12">
+                    <div class="col-md-2 pull-left">
+                        <h5><b>Tìm kiếm câu hỏi</b></h5>
+                        <tr>
+                            <input type="text" ng-model="search" ng-change="filter()" placeholder="Nhập từ khoá..."
+                                   class="form-control"/>
+                        </tr>
+                    </div>
+
+
+                    <div class="col-md-7" style="margin-top: 9px">
+                        <div class="col-md-4">
+                            <label>PageSize</label>
+                            <select ng-value="questionPerPage" ng-model="questionPerPage" class="form-control">
+                                <option>10</option>
+                                <option>20</option>
+                                <option>50</option>
+                                <option>100</option>
+                            </select>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-3 pull-right" style="margin-top: 15px">
+                        <br>
+                        <button class="btn btn-success" ng-click="getQuestion(null)" data-toggle="modal"
+                                onclick="showInsertDialog()"><i
+                                class="material-icons"></i>
+                            <span>Add New Employee</span></button>
+                        <button href="#deleteEmployeeModal" class="btn btn-danger" data-toggle="modal"><i
+                                class="material-icons"></i>
+                            <span>Delete</span></button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12" ng-show="filterQuestion > 0">
+                <table class="table table-striped table-hover">
+                    <thead>
+                    <tr>
+                        <th>
+							<span class="custom-checkbox">
+								<input type="checkbox" id="selectAll">
+								<label for="selectAll"></label>
+							</span>
+                        </th>
+                        <th>STT</th>
+                        <th>Câu hỏi</th>
+                        <th>A</th>
+                        <th>B</th>
+                        <th>C</th>
+                        <th>D</th>
+                        <th>Đáp án</th>
+                        <th>Loại câu hỏi</th>
+                        <th>Hành động</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr class="tss"
+                        ng-repeat="data in searched = (questionList | filter:search | orderBy : base :reverse) | beginningQuestion:(currentPage-1)*questionPerPage | limitTo:questionPerPage">
+                        <td align="center">
+							<span class="custom-checkbox">
+								<input type="checkbox" id="checkbox1" name="options" value="1">
+								<label for="checkbox1"></label>
+							</span>
+                        </td>
+                        <td>{{$index + 1}}</td>
+                        <td>{{data.question}}</td>
+                        <td>{{data.answera}}</td>
+                        <td>{{data.answerb}}</td>
+                        <td>{{data.answerc}}</td>
+                        <td>{{data.answerd}}</td>
+                        <td>{{data.rightanswer}}</td>
+                        <td>{{data.questiongroup}}</td>
+                        <td>
+                            <a href="#editEmployeeModal" ng-click="getQuestion(data)" onclick="showInsertDialog()" class="edit"
+                               data-toggle="modal"><i class="fa fa-pencil"
+                                                      data-toggle="tooltip"
+                                                      title="Edit"></i></a>
+                            <a href="#deleteEmployeeModal" ng-click="deleteConfirm(data)" class="delete" data-toggle="modal"><i class="fa fa-trash"
+                                                                                                                                data-toggle="tooltip"
+                                                                                                                                title="Delete"></i></a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-12" ng-show="filterQuestion == 0">
+                <div class="col-md-12">
+                    <h4>No records found..</h4>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="col-md-6 pull-left">
+                    <h5>Showing {{ searched.length }} of {{ entireQuestion}} entries</h5>
+                </div>
+                <div class="col-md-6" ng-show="filterQuestion > 0">
+                    <div pagination="" page="currentPage" on-select-page="pagePosition(page)" boundary-links="true"
+                         total-items="filterQuestion" items-per-page="questionPerPage"
+                         class="pagination-small pull-right" previous-text="&laquo;" next-text="&raquo;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<dialog id="insertDialog" style="width: 800px; border: none;">
+    <form method="post">
+
+        <div class="row">
+            <div class="col-sm-12 col-md-12" style="margin-top: 50px;">
+                <div class="col-md-2" style="margin-top: 5px">
+                    <label class=" control-label">Câu hỏi</label>
+                </div>
+                <div class="col-md-10">
+                    <input type="text" name="questionData" ng-model="questionDTO.question"
+                           id="questionId" class="form-control" placeholder="Câu hỏi" required="required">
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-12" style="margin-top: 5px;">
+                <div class="col-md-2" style="margin-top: 5px">
+                    <label class=" control-label">Đáp án A</label>
+                </div>
+                <div class="col-md-10">
+                    <input type="text" name="answerData" ng-model="questionDTO.answera"
+                           id="answeraId" class="form-control" placeholder="Đáp án A">
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-12" style="margin-top: 5px;">
+                <div class="col-md-2" style="margin-top: 5px">
+                    <label class=" control-label">Đáp án B</label>
+                </div>
+                <div class="col-md-10">
+                    <input type="text" name="answerData" ng-model="questionDTO.answerb"
+                           id="answerbId" class="form-control" placeholder="Đáp án B">
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-12" style="margin-top: 5px;">
+                <div class="col-md-2" style="margin-top: 5px">
+                    <label class=" control-label">Đáp án C</label>
+                </div>
+                <div class="col-md-10">
+                    <input type="text" name="answerData" ng-model="questionDTO.answerc"
+                           id="answercId" class="form-control" placeholder="Đáp án C">
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-12" style="margin-top: 5px;">
+                <div class="col-md-2" style="margin-top: 5px">
+                    <label class=" control-label">Đáp án D</label>
+                </div>
+                <div class="col-md-10">
+                    <input type="text" name="answerData" ng-model="questionDTO.answerd"
+                           id="answerdId" class="form-control" placeholder="Đáp án D">
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-12" style="margin-top: 5px;">
+                <div class="col-md-2" style="margin-top: 5px">
+                    <label class=" control-label">Đáp án chính xác</label>
+                </div>
+                <div class="col-md-10">
+                    <input type="text" name="rightanswerData" ng-model="questionDTO.rightanswer"
+                           id="rightanswerId" class="form-control" placeholder="Đáp án chính xác">
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-12" style="margin-top: 5px;">
+                <div class="col-sm-2" style="margin-top: 5px">
+                    <label>Loại câu hỏi</label>
+                </div>
+                <div class="col-sm-4 pull-left">
+                    <select ng-model="questionDTO.questiongroup" class="form-control">
+                        <option ng-repeat="g in questionG">{{g.group}}</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <menu>
+            <div class="form-group text-center">
+                <div class="row">
+                    <button type="button" class="btn btn-primary" style="margin-right: 5px;" ng-click="save()">
+                        <i class="fa fa-save"></i>
+                        Lưu
+                    </button>
+                    <button type="button" class="btn btn-primary" style="margin-left: 5px;" onclick="closeDialog()">
+                        <i class="fa fa-close"></i>
+                        Đóng
+                    </button>
+                </div>
+            </div>
+        </menu>
+    </form>
+</dialog>

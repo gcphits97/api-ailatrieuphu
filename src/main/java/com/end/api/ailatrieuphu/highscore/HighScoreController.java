@@ -20,8 +20,6 @@ public class HighScoreController {
 
     @PostMapping(path = "/create-update")
     public ResponseEntity<HighScoreModel> highScoreCRU(@RequestBody HighScoreDTO highScoreDTO) {
-//        return ResponseEntity.ok(highScoreBusiness.createOrUpdate(highScoreDTO));
-//        return ResponseEntity.status(HttpStatus.OK).body(highScoreBusiness.createOrUpdate(highScoreDTO));
         if (highScoreBusiness.createOrUpdate(highScoreDTO) == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         } else {

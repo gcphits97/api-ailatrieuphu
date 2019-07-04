@@ -1,9 +1,11 @@
 package com.end.api.ailatrieuphu.question.business;
 
+import com.end.api.ailatrieuphu.question.dto.QuestionDTO;
 import com.end.api.ailatrieuphu.question.model.QuestionModel;
 import com.end.api.ailatrieuphu.question.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,5 +57,47 @@ public class QuestionBusiness {
             }
         }
         return questionList;
+    }
+
+    public String insertQuestion(QuestionDTO questionDTO) {
+        QuestionModel questionModel = questionRepository.save(QuestionModel.builder()
+            .question(questionDTO.getQuestion())
+            .answera(questionDTO.getAnswera())
+            .answerb(questionDTO.getAnswerb())
+            .answerc(questionDTO.getAnswerc())
+            .answerd(questionDTO.getAnswerd())
+            .rightanswer(questionDTO.getRightanswer())
+            .questiongroup(questionDTO.getQuestiongroup())
+            .build());
+        if (questionModel != null) {
+            return "Thêm câu hỏi thành công!";
+        } else {
+            return "Thêm câu hỏi thất bại!";
+        }
+    }
+
+    public List<QuestionModel> getAll() {
+        return questionRepository.findAll();
+    }
+
+    @Transactional
+    public String deleteQuestion(int id) {
+        questionRepository.delete(questionRepository.findQuestionModelById(id));
+        if (questionRepository.findQuestionModelById(id) == null) {
+            return "Xoá câu hỏi thành công";
+        } else {
+            return "Xoá câu hỏi thất bại";
+        }
+    }
+
+    @Transactional
+    public String updateQuestion(QuestionDTO questionDTO) {
+        int i = questionRepository.updateQuestion(questionDTO.getQuestion(), questionDTO.getAnswera(), questionDTO.getAnswerb(),
+                questionDTO.getAnswerc(), questionDTO.getAnswerd(), questionDTO.getRightanswer(), questionDTO.getQuestiongroup(), questionDTO.getId());
+        if (i == 1) {
+            return "Cập nhật câu hỏi thành công";
+        } else {
+            return "Cập nhật câu hỏi thất bại";
+        }
     }
 }

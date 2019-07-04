@@ -15,6 +15,5 @@ public class QuestionDTO {
     private String answerc;
     private String answerd;
     private String rightanswer;
-    private String questiontype;
     private String questiongroup;
 }

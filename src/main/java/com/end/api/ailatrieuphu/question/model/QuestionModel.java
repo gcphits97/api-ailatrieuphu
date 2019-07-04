@@ -1,16 +1,22 @@
 package com.end.api.ailatrieuphu.question.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "question")
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class QuestionModel {
     @Id
-    @GeneratedValue
-    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false, unique = true)
     private int id;
 
     @Column(name = "question", nullable = false)
@@ -30,9 +36,6 @@ public class QuestionModel {
 
     @Column(name = "rightanswer", nullable = false)
     private String rightanswer;
-
-//    @Column(name = "questiontype", nullable = false)
-//    private String questiontype;
 
     @Column(name = "questiongroup", nullable = false)
     private String questiongroup;
