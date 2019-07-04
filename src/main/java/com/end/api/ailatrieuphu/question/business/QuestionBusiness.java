@@ -100,4 +100,22 @@ public class QuestionBusiness {
             return "Cập nhật câu hỏi thất bại";
         }
     }
+
+    @Transactional
+    public String deleteMultipleQuestion(List<Integer> listId) {
+        boolean check = true;
+        for (int id: listId) {
+            questionRepository.delete(questionRepository.findQuestionModelById(id));
+            if (questionRepository.findQuestionModelById(id) == null) {
+                check = true;
+            } else {
+                check = false;
+            }
+        }
+        if (check) {
+            return "Xoá thành công";
+        } else {
+            return "Xoá thất bại";
+        }
+    }
 }

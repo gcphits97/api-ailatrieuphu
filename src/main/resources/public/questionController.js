@@ -3,7 +3,7 @@
 */
 var app = angular.module("questionMng", ["ui.router", 'ui.bootstrap']);
 
-app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
+app.config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
     $locationProvider.hashPrefix('');
     //trở về trang mặc định
     $urlRouterProvider.otherwise("/question-manager");
@@ -99,6 +99,7 @@ app.controller("questionController", function ($scope, $http, $state) {
         $scope.reverse = !$scope.reverse;
     };
 
+    //popup xác nhận xoá
     $scope.deleteConfirm = function deleteConfirm(data) {
         var result = confirm("Bạn chắc chắn muốn xoá câu hỏi này");
         if (result) {
@@ -109,20 +110,60 @@ app.controller("questionController", function ($scope, $http, $state) {
         }
     };
 
+    //delete multiple row
+    $scope.removeAll = function () {
+        var removeList = [];
+        var selectedIds = new Array();
+        angular.forEach($scope.questionList, function (ques) {
+            if (ques.selected) {
+                selectedIds.push(ques.id);
+                removeList.push(ques);
+            }
+        });
+        console.log(selectedIds);
+
+        $http({
+            method: 'DELETE',
+            url: "http://localhost:8080/question/deleteMultiple/" + selectedIds,
+            headers: {
+                "Content-Type": "text/plain"
+            }
+        }).then(function successCallback(response) {
+            alert(response.data);
+            $state.reload();
+        }, function errorCallback(response) {
+            alert(response.data);
+            $state.reload();
+        });
+
+        $scope.questionList = removeList;
+    };
+
     //delete question
     $scope.delete = function (data) {
         $http({
             method: 'DELETE',
-            url: "http://localhost:8080/question/delete/" + data.id
+            url: "http://localhost:8080/question/delete/" + data.id,
+            headers: {
+                "Content-Type": "text/plain"
+            }
         }).then(function successCallback(response) {
-            console.log(response);
+            alert(response.data);
             $state.reload();
         }, function errorCallback(response) {
-            console.log(response);
+            alert(response.data);
             $state.reload();
         });
     };
 
+
+    //multiple choice
+    $scope.selectAllQuestion = function () {
+        $scope.isAll = !$scope.isAll;
+        angular.forEach($scope.questionList, function (ques) {
+            ques.selected = $scope.isAll;
+        });
+    };
 
     //set value for questionDTO
     $scope.getQuestion = function getQuestion(data) {
@@ -147,7 +188,6 @@ app.controller("questionController", function ($scope, $http, $state) {
         }
     };
 
-
     //save or update question
     $scope.save = function save() {
         console.log($scope.questionDTO);
@@ -155,24 +195,30 @@ app.controller("questionController", function ($scope, $http, $state) {
             $http({
                 method: 'POST',
                 url: "http://localhost:8080/question/insert",
-                data: $scope.questionDTO
+                data: $scope.questionDTO,
+                headers: {
+                    "Content-Type": "text/plain", "Content-Type": "application/json"
+                }
             }).then(function successCallback(response) {
-                console.log(response);
+                alert(response.data);
                 $state.reload();
             }, function errorCallback(response) {
-                console.log(response);
+                alert(response.data);
                 $state.reload();
             });
         } else {
             $http({
                 method: 'PUT',
                 url: "http://localhost:8080/question/update",
-                data: $scope.questionDTO
+                data: $scope.questionDTO,
+                headers: {
+                    "Content-Type": "text/plain", "Content-Type": "application/json"
+                }
             }).then(function successCallback(response) {
-                console.log(response);
+                alert(response.data);
                 $state.reload();
             }, function errorCallback(response) {
-                console.log(response);
+                alert(response.data);
                 $state.reload();
             });
         }

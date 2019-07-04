@@ -31,9 +31,10 @@
                                 onclick="showInsertDialog()"><i
                                 class="material-icons"></i>
                             <span>Add New Employee</span></button>
-<!--                        <button href="#deleteEmployeeModal" class="btn btn-danger" data-toggle="modal"><i-->
-<!--                                class="material-icons"></i>-->
-<!--                            <span>Delete</span></button>-->
+                        <button href="#deleteEmployeeModal" ng-click="removeAll()" class="btn btn-danger" data-toggle="modal"><i
+                                class="material-icons"></i>
+                            <span>Delete</span>
+                        </button>
                     </div>
                 </div>
 
@@ -44,12 +45,9 @@
                 <table class="table table-striped table-hover">
                     <thead>
                     <tr>
-<!--                        <th>-->
-<!--							<span class="custom-checkbox">-->
-<!--								<input type="checkbox" id="selectAll">-->
-<!--								<label for="selectAll"></label>-->
-<!--							</span>-->
-<!--                        </th>-->
+                        <th>
+                            <input type="checkbox" name="all" ng-click="selectAllQuestion()"/>
+                        </th>
                         <th>STT</th>
                         <th>Câu hỏi</th>
                         <th>A</th>
@@ -64,12 +62,9 @@
                     <tbody>
                     <tr class="tss"
                         ng-repeat="data in searched = (questionList | filter:search | orderBy : base :reverse) | beginningQuestion:(currentPage-1)*questionPerPage | limitTo:questionPerPage">
-<!--                        <td align="center">-->
-<!--							<span class="custom-checkbox">-->
-<!--								<input type="checkbox" id="checkbox1" name="options" value="1">-->
-<!--								<label for="checkbox1"></label>-->
-<!--							</span>-->
-<!--                        </td>-->
+                        <td align="center">
+                            <input type="checkbox" name="all" ng-model="data.selected">
+                        </td>
                         <td>{{$index + 1}}</td>
                         <td>{{data.question}}</td>
                         <td>{{data.answera}}</td>
