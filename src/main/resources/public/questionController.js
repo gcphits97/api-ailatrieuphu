@@ -54,6 +54,21 @@ app.controller("questionController", function ($scope, $http, $state) {
         }
     ];
 
+    $scope.result = [
+        {
+            "key": "A"
+        },
+        {
+            "key": "B"
+        },
+        {
+            "key": "C"
+        },
+        {
+            "key": "D"
+        }
+    ];
+
     //get all question
     $http({
         method: 'GET',
@@ -128,7 +143,7 @@ app.controller("questionController", function ($scope, $http, $state) {
             $scope.questionDTO.answerc = data.answerc;
             $scope.questionDTO.answerd = data.answerd;
             $scope.questionDTO.rightanswer = data.rightanswer;
-            $scope.questionDTO.questiongroup = data.questiongroup;
+            $scope.questionDTO.questiongroup = data.questiongroup.uppercase;
         }
     };
 
@@ -143,16 +158,6 @@ app.controller("questionController", function ($scope, $http, $state) {
                 data: $scope.questionDTO
             }).then(function successCallback(response) {
                 console.log(response);
-                // if (response.status === 200) {
-                //     $state.reload();
-                // } else {
-                //     var ques = document.getElementById("questionId");
-                //     if (ques.length === 0) {
-                //         ques.oninvalid = function (ev) {
-                //             ev.target("Câu hỏi không được để trống");
-                //         }
-                //     }
-                // }
                 $state.reload();
             }, function errorCallback(response) {
                 console.log(response);
